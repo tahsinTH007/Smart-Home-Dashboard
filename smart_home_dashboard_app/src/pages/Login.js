@@ -1,9 +1,40 @@
-import React from 'react'
+import React, { useRef } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router'
 import img1 from '../img/img2.jpg'
 import { FaGoogle } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
 
 const Login = () => {
+  const email = useRef()
+  const password = useRef()
+  const navigate = useNavigate()
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    const user = {
+      email: email.current.value,
+      password: password.current.value
+    }
+
+    try {
+      await axios.post('/api/auth/login',user)
+      navigate('/')
+  } catch (error) {
+      console.log(error);
+  }
+
+    // axios.post('/api/auth/login',user)
+    //   .then(response => {
+    //     console.log('Response received:', response);
+    //     console.log(response.data.email);
+    //   })
+    //   .catch(error => {
+    //     console.log('Error occurred:', error);
+    //   });
+  }
+
+
   return (
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
         {/* login container */}
@@ -12,17 +43,21 @@ const Login = () => {
           <div className="md:w-1/2 px-8 md:px-16">
              <h2 className="font-bold text-2xl text-[#002D74]">Login </h2>
              <p className="text-xs mt-4 text-[#002D74]">If you are already a member, easily log in </p>
-             <form className="flex flex-col gap-4" >
+             <form className="flex flex-col gap-4" onSubmit={handleLogin} >
               <input 
                 className="p-2 mt-8 rounded-xl border" 
                 type="email" 
                 placeholder="Email"
+                required
+                ref={email}
               />
               <div className="relative">
                 <input 
                   className="p-2 rounded-xl border w-full" 
                   type="password" 
                   placeholder="Password"
+                  required
+                  ref={password}
                 />
                 <FaRegEye className='absolute top-1/2 right-3 -translate-y-1/2' />
               </div>
