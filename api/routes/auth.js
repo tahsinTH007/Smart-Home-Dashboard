@@ -33,10 +33,13 @@ router.post('/register', async(req, res) => {
 router.post('/login', async(req, res) => {
     try {
         const user = await User.findOne({email: req.body.email})
-        !user && res.status(404).send('user not found')
+        if(!user){
+            return res.status(404).send('user not found')
+        }
         const validPassword = await bcrypt.compare(req.body.password, user.password)
-        !validPassword && res.status(400).send('Wrong password')
-
+        if(!validPassword){
+            return res.status(400).send('Wrong password')
+        }
         res.status(200).json(user)
 
     } catch (error) {

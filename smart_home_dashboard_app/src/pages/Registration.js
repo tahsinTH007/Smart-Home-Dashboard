@@ -34,7 +34,7 @@ const Registration = () => {
         }
         try {
             await axios.post('/api/auth/register',user)
-            navigate('/login')
+            navigate('/')
         } catch (error) {
             console.log(error);
         }

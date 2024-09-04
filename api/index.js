@@ -32,11 +32,6 @@ app.use(cors(corsOptions));
 app.use('/api/users', userRouter)
 app.use('/api/auth', userAuth)
 
-app.get('/', (req, res) => {
-    console.log("homepage");
-    res.send('homepage')
-})
-
 
 app.listen(5000,() => {
     console.log("Server is listing at port 5000");

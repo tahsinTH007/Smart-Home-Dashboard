@@ -1,38 +1,44 @@
-import React, { useRef } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router'
+import React, { useContext, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import img1 from '../img/img2.jpg'
 import { FaGoogle } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
+
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import ApiLoginCalls from '../ApiCalls';
 
 const Login = () => {
   const email = useRef()
   const password = useRef()
   const navigate = useNavigate()
+  
+  const {user, isFetching, dispatch} = useContext(AuthContext)
+  console.log(user);
 
   const handleLogin = async (e) => {
     e.preventDefault()
     const user = {
       email: email.current.value,
       password: password.current.value
-    }
-
+  }
+    dispatch({type: "LOGIN_START"})
     try {
-      await axios.post('/api/auth/login',user)
-      navigate('/')
-  } catch (error) {
-      console.log(error);
+        const res = await axios.post('/api/auth/login', user)
+        dispatch({type: "LOGIN_SUCCESS", payload: res.data})
+        navigate('/home')
+    } catch (err) {
+        dispatch({type: "LOGIN_FAILURE", payload: err})
+    }
+    // const user = {
+    //   email: email.current.value,
+    //   password: password.current.value
+    // }
+    // const data = await axios.post("/api/auth/login", user)
+    // console.log(data);
   }
 
-    // axios.post('/api/auth/login',user)
-    //   .then(response => {
-    //     console.log('Response received:', response);
-    //     console.log(response.data.email);
-    //   })
-    //   .catch(error => {
-    //     console.log('Error occurred:', error);
-    //   });
-  }
+
 
 
   return (
@@ -76,7 +82,9 @@ const Login = () => {
             </div>
             <div className="mt-3 text-xs flex justify-between items-center text-[#002D74]">
               <p>Don't have an account?</p>
+              <Link to='/register'>
                 <button className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">Register</button>
+              </Link>
             </div>
           </div>
           <div className="md:block hidden w-1/2">
