@@ -6,14 +6,13 @@ import { FaRegEye } from "react-icons/fa6";
 
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import ApiLoginCalls from '../ApiCalls';
 
 const Login = () => {
   const email = useRef()
   const password = useRef()
   const navigate = useNavigate()
   
-  const {user, isFetching, dispatch} = useContext(AuthContext)
+  const {user, dispatch} = useContext(AuthContext)
   console.log(user);
 
   const handleLogin = async (e) => {
@@ -37,9 +36,6 @@ const Login = () => {
     // const data = await axios.post("/api/auth/login", user)
     // console.log(data);
   }
-
-
-
 
   return (
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">

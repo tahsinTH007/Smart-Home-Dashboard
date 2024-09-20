@@ -5,7 +5,7 @@ import Feed from "../components/Feed.js"
 
 const Home = () => {
   return (
-    <div className='flex w-full bg-[#E1E8F4]'>
+    <div className='flex w-full bg-[#eff2fa]'>
       <SideBar/>
       <Feed />
       <RightBar />

@@ -9,7 +9,7 @@ import { TbLogout } from "react-icons/tb";
 
 const SideBar = () => {
   return (
-    <div className='bg-[#E1E8F4] h-[calc(100vh-18px)] p-3 mx-6 my-2 rounded-lg shadow-lg shadow-[_rgba(4,114,247,0.5)] flex flex-col justify-between '>
+    <div className='bg-[#eff2fa] h-[calc(100vh-18px)] p-3 mx-6 my-2 rounded-lg shadow-lg shadow-[_rgba(4,114,247,0.5)] flex flex-col justify-between '>
          <div className='flex flex-col'>
             <div className='h-10 w-10 mt-2 rounded-full bg-white flex justify-center items-center shadow-md shadow-[_rgba(4,114,247,0.5)]'>
               <IoMdHome className='text-[#2D89FF] text-2xl cursor-pointer'/>
