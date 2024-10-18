@@ -1,67 +1,71 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, {  useEffect, useRef, useState } from 'react'
 import profileImg from "../assect/Profile.png";
-import { FaRegEye } from "react-icons/fa6";
-import { FaGoogle } from "react-icons/fa";
+// import { FaRegEye } from "react-icons/fa6";
+// import { FaGoogle } from "react-icons/fa";
 import { MdOutlinePermMedia } from "react-icons/md";
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { toast } from 'react-toastify';
+import { clearAllUserErrors, update } from '../store/slice/userSlice';
+
 
 const EditProfile = () => {
-    const {user, dispatch} = useContext(AuthContext)
-    const navigate = useNavigate()
-    const username = useRef()
+    const { user, error, isUpdated } = useSelector((state) => state.user);
+    
+    console.log(user)
+
+    const navigateTo = useNavigate()
+    const fullName = useRef()
     const email = useRef()
-    const currentPassaword = useRef()
+    const currentPassword = useRef()
     const newPassword = useRef()
     const againPassword = useRef()
 
     const [file, setFile] = useState(null)
+
+    // Handle file selection
+    const onFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    const dispatch = useDispatch();
+
     const submitHandler = async(e)=> {
         e.preventDefault()
+
+        console.log(newPassword.current.value);
+        console.log(againPassword.current.value);
+
         if(newPassword.current.value !== againPassword.current.value){
-            againPassword.current.setCustomValidity("Password don't match")
+          toast("Password don't match",{
+            type: "warning"
+          })
         }else{
-            const newPost = {
-                userId: user._id,
-                username: username.current.value,
-                email: email.current.value,
-                currentPassaword: currentPassaword.current.value,
-                newPassword: newPassword.current.value,
-            }
-            console.log("1")
-            // if(file){
-            //     const Fdata = new FormData()
-            //     const filename =`${Date.now()} ${file.name}`;
-            //     Fdata.append("file", file)
-            //     Fdata.append('name', filename)
-            //     newPost.profilePicture = file.name
-            //     console.log("2")
-            //     try {
-            //         await axios.post('/api/upload', Fdata)
-            //         console.log("3")
-            //     } catch (error) {
-            //         console.log(error);
-            //     }
-            // }
-            try {
-                console.log(newPost)
-              const res = await axios.put('/api/user/update',{
-                userId: '66e95a1e5ab0e06e0017f09c',
-                username: "tahsin",
-                email: "tahsin@gamil.com",
-                currentPassaword: "098765",
-                newPassword: "123456",
-            });
-            //   dispatch({type: "LOGIN_SUCCESS", payload: res.data})
-              navigate("/home")
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('userId', user._id);
+        formData.append('fullName', fullName.current.value);
+        formData.append('email', email.current.value);
+        formData.append('currentPassword', currentPassword.current.value);
+        formData.append('newPassword', newPassword.current.value);
 
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
+        dispatch(update(formData));
+       }
     }
+
+    useEffect(() => {
+      if (error) {
+        toast.error(error);
+        dispatch(clearAllUserErrors());
+      }
+      if (isUpdated) {
+        navigateTo("/home");
+      }
+    })
+
   return (
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
     {/* login container */}
@@ -73,8 +77,8 @@ const EditProfile = () => {
           <input 
             className="p-2 bg-gray-100 mt-8 w-[280px] " 
             type="text"  
-            placeholder={user.username || "User Name"}
-            ref={username}
+            placeholder={user.fullName || "User Name"}
+            ref={fullName}
           />
           <hr className="w-[280px] border-gray-400 mt-[-14px]" />
           <input 
@@ -88,7 +92,7 @@ const EditProfile = () => {
               className="p-2 bg-gray-100 w-[280px]" 
               type="password" 
               placeholder="Current Password"
-              ref={currentPassaword}
+              ref={currentPassword}
             />
             <hr className="w-[280px] border-gray-400 mt-[-14px]" />
           <input 
@@ -122,7 +126,7 @@ const EditProfile = () => {
                         type="file"
                         id='file'
                         accept='.png, .jpg, .jpeg'
-                        onChange={(e) => setFile(e.target.files[0])}
+                        onChange={onFileChange}
                         className='hidden' 
                     />
               </label>

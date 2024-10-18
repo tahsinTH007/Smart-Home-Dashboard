@@ -20,12 +20,12 @@ const RightBarDevice = () => {
        
       );
   return (
-    <section className="bg-blue-200 mt-6 p-3 rounded-3xl max-w-64 mx-auto">
-    <div className="flex space-x-16 items-center mb-2">
-      <h2 className="text-lg font-medium pl-5">All Devices</h2>
+    <section className="bg-blue-200 mt-6 p-4 rounded-3xl w-[200px] mx-auto">
+    <div className="flex  items-center justify-between mb-2">
+      <h2 className="text-md font-medium pl-5">All Devices</h2>
       <EllipsisVertical  />
     </div>
-    <div className="grid grid-cols-2 pl-6 gap-2 ">
+    <div className="grid grid-cols-2 pl-3 gap-4 ">
       {devices.map((device) => (
         <DeviceCard key={device} name={device.name} Icon={device.Icon} />
       ))}

@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className='flex w-full bg-[#eff2fa]'>
       <SideBar/>
-      <Feed />
+      <Feed /> 
       <RightBar />
     </div>
   )

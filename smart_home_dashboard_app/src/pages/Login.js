@@ -1,41 +1,42 @@
-import React, { useContext, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import img1 from '../img/img2.jpg'
+import React, { useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import img1 from '../img/img2.jpg';
 import { FaGoogle } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
+import { clearAllUserErrors, login } from '../store/slice/userSlice';
+import { toast } from 'react-toastify';
 
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
   const email = useRef()
   const password = useRef()
-  const navigate = useNavigate()
+  const navigateTo = useNavigate()
+
+  const { isAuthenticated, error } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch()
   
-  const {user, dispatch} = useContext(AuthContext)
-  console.log(user);
 
   const handleLogin = async (e) => {
     e.preventDefault()
     const user = {
-      email: email.current.value,
-      password: password.current.value
+        email: email.current.value,
+        password: password.current.value
+      }
+
+      dispatch(login(user));
   }
-    dispatch({type: "LOGIN_START"})
-    try {
-        const res = await axios.post('/api/auth/login', user)
-        dispatch({type: "LOGIN_SUCCESS", payload: res.data})
-        navigate('/home')
-    } catch (err) {
-        dispatch({type: "LOGIN_FAILURE", payload: err})
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearAllUserErrors());
     }
-    // const user = {
-    //   email: email.current.value,
-    //   password: password.current.value
-    // }
-    // const data = await axios.post("/api/auth/login", user)
-    // console.log(data);
-  }
+    if (isAuthenticated) {
+      navigateTo("/home");
+    }
+  }, [dispatch, error, isAuthenticated]);
 
   return (
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
